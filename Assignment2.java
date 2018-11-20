@@ -10,7 +10,6 @@ import java.util.List;
 //import java.util.Set;
 //import java.util.HashSet;
 public class Assignment2 extends JDBCSubmission {
-    Connection conn;
 
     public Assignment2() throws ClassNotFoundException {
 
@@ -19,34 +18,28 @@ public class Assignment2 extends JDBCSubmission {
 
     @Override
     public boolean connectDB(String url, String username, String password) {
-        // Implement this method!
-        try
-        {
-            conn = DriverManager.getConnection(url, username, password);
-        }
-        catch (SQLException e)
-        {
-            // do something appropriate with the exception, *at least*:
-            e.printStackTrace();
-        }
+        Properties connProps = new Properties();
+        connProps.put("user", username);
+        connProps.put("password", password);
 
+        try{
+            connection = DriverManager.getConnection(url, connProps);
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
     @Override
     public boolean disconnectDB() {
-        // Implement this method!
-        try
-        {
-            conn.close();
-        }
-        catch (SQLException e)
-        {
-            // do something appropriate with the exception, *at least*:
+        try {
+            connection.close();
+        } catch(Exception e){
             e.printStackTrace();
+            return false;
         }
-
-        return false;
+        return true;
     }
 
     @Override
