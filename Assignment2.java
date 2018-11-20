@@ -18,13 +18,14 @@ public class Assignment2 extends JDBCSubmission {
 
     @Override
     public boolean connectDB(String url, String username, String password) {
-        Properties connProps = new Properties();
-        connProps.put("user", username);
-        connProps.put("password", password);
-
-        try{
-            connection = DriverManager.getConnection(url, connProps);
-        } catch(Exception e){
+        // Implement this method!
+        try
+        {
+            connection = DriverManager.getConnection(url, username, password);
+        }
+        catch (SQLException e)
+        {
+            // do something appropriate with the exception, *at least*:
             e.printStackTrace();
             return false;
         }
