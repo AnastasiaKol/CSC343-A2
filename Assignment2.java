@@ -77,6 +77,8 @@ public class Assignment2 extends JDBCSubmission {
             cabinets = new ArrayList<>(cabinetList);
         } catch(SQLException sqle){
             sqle.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 
