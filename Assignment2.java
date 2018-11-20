@@ -51,29 +51,33 @@ public class Assignment2 extends JDBCSubmission {
 
     @Override
     public ElectionCabinetResult electionSequence(String countryName) {
-        // Implement this method!
-        try
-        {
-            PreparedStatement stmt = conn.prepareStatement("SELECT e.* FROM election e");
-            ResultSet countryElections = stmt.executeQuery();
-            while (countryElections.next()) {
-              int id = countryElections.getInt(1);
-              /* If the tuple also had a float and another int
-              attribute, you’d get them by calling
-              worths.getFloat(2) and worths.getInt(3).
-              Or you can look up values by attribute name.
-              Example: worths.getInt(netWorth)
-              */
-              System.out.println(id);
-            }
-        }
-        catch (SQLException e)
-        {
-            // do something appropriate with the exception, *at least*:
-            e.printStackTrace();
-        }
+        try{
+            List<Integer> electionList = new LinkedList<>();
+            List<Integer> cabinetList = new LinkedList<>();
 
-        return null;
+            PreparedStatement statement = connection.prepareStatement(
+                "SELECT
+                    e.id AS election_id,
+                    cab.id AS cabinet_id
+                FROM election e, cabinet cab, country c
+                WHERE e.id=cab.election_id AND c.id=e.country_id AND c.name='?';"
+            );
+
+            statement.setString(1, countryName);
+            ResultSet rs = statement.executeQuery();
+            
+            while(rs.next()){
+                Integer electionID = rs.getInt("election_id");
+                Integer cabinetID = rs.getInt("cabinet_id");
+                electionList.add(electionID);
+                cabinetList.add(cabinetID);
+            }
+
+            elections = new ArrayList<>(electionList);
+            cabinets = new ArrayList<>(cabinetList);
+        } catch(SQLException sqle){
+            sqle.printStackTrace();
+        }
     }
 
     @Override
